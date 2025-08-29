@@ -14,7 +14,7 @@ h1 {
     letter-spacing: 2px;
 }
 
-#setup-container, #game-container, #custom-setup {
+#game-container {
     padding: 20px;
     border-radius: 10px;
     background-color: #fff8f8;
@@ -22,22 +22,8 @@ h1 {
     text-align: center;
     margin-bottom: 20px;
 }
-#setup-container, #custom-setup {
-    width: 350px;
-}
 .hidden {
     display: none !important;
-}
-
-#custom-board-input {
-    width: 90%;
-    height: 150px;
-    margin-top: 10px;
-    border-radius: 8px;
-    border: 1px solid #f0b0c0;
-    padding: 10px;
-    resize: none;
-    font-family: monospace;
 }
 
 #sudoku-grid {
@@ -151,7 +137,7 @@ input {
     justify-content: center;
     gap: 10px;
 }
-.num-button, #note-mode-toggle, #random-mode-button, #custom-mode-button, #start-button {
+.num-button, #note-mode-toggle {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -164,7 +150,7 @@ input {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: background-color 0.2s;
 }
-.num-button:hover, #note-mode-toggle:hover, #random-mode-button:hover, #custom-mode-button:hover, #start-button:hover {
+.num-button:hover, #note-mode-toggle:hover {
     background-color: #ec407a;
 }
 #note-mode-toggle {
@@ -177,19 +163,10 @@ input {
     background-color: #a00037;
 }
 
-#random-mode-button, #custom-mode-button, #start-button {
-    width: auto;
-    border-radius: 25px;
-    padding: 10px 20px;
-    font-size: 1rem;
-    font-weight: normal;
-}
-#start-button {
-    margin-top: 15px;
-}
-
 .buttons {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: 15px;
     margin-top: 20px;
 }
@@ -212,4 +189,63 @@ input {
     font-size: 0.8rem;
     color: #888;
     margin-top: 20px;
+}
+
+/* ポップアップ用のスタイル */
+#modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+#modal-content {
+    background-color: #fff8f8;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+}
+#modal-content h2 {
+    color: #d81b60;
+    margin-top: 0;
+}
+#custom-board-input {
+    width: 90%;
+    height: 120px;
+    margin: 15px 0;
+    padding: 10px;
+    border: 1px solid #f0b0c0;
+    border-radius: 8px;
+    resize: none;
+    font-family: monospace;
+}
+.modal-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+.modal-buttons button {
+    background-color: #d81b60;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: background-color 0.2s;
+}
+.modal-buttons button:hover {
+    background-color: #a00037;
+}
+.modal-hidden {
+    display: none;
 }
