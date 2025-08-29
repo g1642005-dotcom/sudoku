@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     cell.classList.add('fixed');
                 } else {
                     const input = document.createElement('input');
-                    input.type = 'tel'; // IMEを無効化するために'tel'に変更
+                    input.type = 'tel';
                     input.maxLength = 1;
                     input.dataset.row = row;
                     input.dataset.col = col;
@@ -68,27 +68,22 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
 
-                    // キーボード入力の制限と削除処理
+                    // キーボード入力の処理
                     input.addEventListener('keydown', (e) => {
                         if (e.key === 'Backspace' || e.key === 'Delete') {
                             e.preventDefault();
-                            if (selectedCell) {
-                                selectedInput.value = '';
+                            selectedInput.value = '';
+                            clearNotes(selectedCell);
+                        } else if (/^[1-9]$/.test(e.key)) {
+                            e.preventDefault(); // デフォルトの入力を防ぐ
+                            if (noteMode) {
+                                toggleNote(selectedCell, parseInt(e.key));
+                            } else {
+                                selectedInput.value = e.key;
                                 clearNotes(selectedCell);
                             }
-                        } else if (!/^[1-9]$/.test(e.key) && !e.metaKey && !e.ctrlKey) {
+                        } else {
                             e.preventDefault();
-                        }
-                    });
-                    
-                    // IME入力対応と上書き
-                    input.addEventListener('input', (e) => {
-                        const value = e.target.value;
-                        if (!/^[1-9]$/.test(value) && value !== '') {
-                             e.target.value = '';
-                        }
-                        if (selectedCell) {
-                            clearNotes(selectedCell);
                         }
                     });
                 }
