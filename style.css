@@ -14,6 +14,32 @@ h1 {
     letter-spacing: 2px;
 }
 
+#setup-container, #game-container, #custom-setup {
+    padding: 20px;
+    border-radius: 10px;
+    background-color: #fff8f8;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    text-align: center;
+    margin-bottom: 20px;
+}
+#setup-container, #custom-setup {
+    width: 350px;
+}
+.hidden {
+    display: none !important;
+}
+
+#custom-board-input {
+    width: 90%;
+    height: 150px;
+    margin-top: 10px;
+    border-radius: 8px;
+    border: 1px solid #f0b0c0;
+    padding: 10px;
+    resize: none;
+    font-family: monospace;
+}
+
 #sudoku-grid {
     display: grid;
     grid-template-columns: repeat(9, 40px);
@@ -43,7 +69,6 @@ h1 {
 .cell:nth-child(9n+4), .cell:nth-child(9n+7) {
     border-left: 2px solid #d81b60;
 }
-
 .cell:nth-child(n) {
     border-bottom: 1px solid #f0b0c0;
 }
@@ -86,9 +111,6 @@ input {
     border: 2px solid #f06292 !important;
     background-color: #fff0f5;
 }
-.cell input:focus {
-    background-color: #fff0f5;
-}
 
 .notes {
     display: grid;
@@ -129,8 +151,7 @@ input {
     justify-content: center;
     gap: 10px;
 }
-
-.num-button, #note-mode-toggle {
+.num-button, #note-mode-toggle, #random-mode-button, #custom-mode-button, #start-button {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -143,7 +164,7 @@ input {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: background-color 0.2s;
 }
-.num-button:hover, #note-mode-toggle:hover {
+.num-button:hover, #note-mode-toggle:hover, #random-mode-button:hover, #custom-mode-button:hover, #start-button:hover {
     background-color: #ec407a;
 }
 #note-mode-toggle {
@@ -156,13 +177,23 @@ input {
     background-color: #a00037;
 }
 
+#random-mode-button, #custom-mode-button, #start-button {
+    width: auto;
+    border-radius: 25px;
+    padding: 10px 20px;
+    font-size: 1rem;
+    font-weight: normal;
+}
+#start-button {
+    margin-top: 15px;
+}
+
 .buttons {
     display: flex;
     gap: 15px;
     margin-top: 20px;
 }
-
-.buttons button, #start-button {
+.buttons button {
     background-color: #d81b60;
     color: white;
     padding: 10px 20px;
@@ -173,8 +204,7 @@ input {
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: background-color 0.2s;
 }
-
-.buttons button:hover, #start-button:hover {
+.buttons button:hover {
     background-color: #a00037;
 }
 
