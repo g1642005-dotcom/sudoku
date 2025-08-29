@@ -10,13 +10,7 @@
 
     <h1>数独</h1>
 
-    <div id="setup-container">
-        <h2>ゲームモードを選択</h2>
-        <button id="random-mode-button">ランダムで問題を解く</button>
-        <button id="custom-mode-button">問題を入力して解く</button>
-    </div>
-
-    <div id="game-container" class="hidden">
+    <div id="game-container">
         <div id="sudoku-grid"></div>
 
         <div id="number-buttons"></div>
@@ -24,6 +18,8 @@
         <div class="buttons">
             <button id="check-button">解答チェック</button>
             <button id="reset-button">リセット</button>
+            <button id="new-game-button">新しいゲーム</button>
+            <button id="custom-game-button">問題を入力して解く</button>
         </div>
 
         <div id="update-info">
@@ -31,11 +27,16 @@
         </div>
     </div>
 
-    <div id="custom-setup" class="hidden">
-        <h2>問題を入力してください</h2>
-        <p>例: [5, 3, 0, 0, 7, 0, 0, 0, 0]</p>
-        <textarea id="custom-board-input" placeholder="数独の盤面を9行で入力してください。0は空白です。"></textarea>
-        <button id="start-button">ゲーム開始</button>
+    <div id="modal" class="modal-hidden">
+        <div id="modal-content">
+            <h2>問題を入力してください</h2>
+            <p>数字81個を続けて入力してください (0は空白)。</p>
+            <textarea id="custom-board-input" placeholder="例: 530070000600195000098000060..."></textarea>
+            <div class="modal-buttons">
+                <button id="start-button">ゲーム開始</button>
+                <button id="close-modal-button">閉じる</button>
+            </div>
+        </div>
     </div>
 
     <script src="script.js"></script>
