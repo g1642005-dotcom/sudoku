@@ -70,16 +70,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // キーボード入力の制限と削除処理
                     input.addEventListener('keydown', (e) => {
-                        if (!/^[1-9]$/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && !e.metaKey && !e.ctrlKey) {
-                            e.preventDefault();
-                        }
-                        // DeleteキーとBackspaceキーで入力とメモを削除
                         if (e.key === 'Backspace' || e.key === 'Delete') {
                             e.preventDefault();
                             if (selectedCell) {
                                 selectedInput.value = '';
                                 clearNotes(selectedCell);
                             }
+                        } else if (!/^[1-9]$/.test(e.key) && !e.metaKey && !e.ctrlKey) {
+                            e.preventDefault();
+                        }
+                    });
+                    
+                    // IME入力対応
+                    input.addEventListener('input', (e) => {
+                        const value = e.target.value;
+                        if (!/^[1-9]$/.test(value)) {
+                            e.target.value = '';
                         }
                     });
                 }
@@ -153,7 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // リセットボタンの機能を追加
     resetButton.addEventListener('click', () => {
         if (selectedCell && !selectedCell.classList.contains('fixed')) {
             const inputElement = selectedCell.querySelector('input');
