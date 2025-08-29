@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const numberButtonsContainer = document.getElementById('number-buttons');
     const checkButton = document.getElementById('check-button');
     const resetButton = document.getElementById('reset-button');
+    const updateDateElement = document.getElementById('update-date');
 
     const noteModeToggle = document.createElement('button');
     noteModeToggle.id = 'note-mode-toggle';
@@ -68,7 +69,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
 
-                    // キーボード入力の処理
                     input.addEventListener('keydown', (e) => {
                         if (e.key === 'Backspace' || e.key === 'Delete') {
                             e.preventDefault();
@@ -87,7 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 }
                             }
                         } else if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt') {
-                            // Control, Shift, Altは許可
                         } else {
                             e.preventDefault();
                         }
@@ -175,4 +174,27 @@ document.addEventListener('DOMContentLoaded', () => {
 
     createBoard();
     createNumberButtons();
+    
+    // サーバーの最終更新日を取得して表示
+    if (updateDateElement) {
+        fetch('script.js', { method: 'HEAD' })
+            .then(response => {
+                const lastModified = response.headers.get('Last-Modified');
+                if (lastModified) {
+                    const formattedDate = new Date(lastModified).toLocaleString('ja-JP', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric'
+                    });
+                    updateDateElement.textContent = formattedDate;
+                } else {
+                    updateDateElement.textContent = '不明';
+                }
+            })
+            .catch(() => {
+                updateDateElement.textContent = '取得エラー';
+            });
+    }
 });
