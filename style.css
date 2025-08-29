@@ -3,13 +3,13 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #ffe0e6;
+    background-color: #ffe0e6; /* ピンク系の背景色 */
     margin-top: 20px;
     color: #444;
 }
 
 h1 {
-    color: #d81b60;
+    color: #d81b60; /* 濃いピンク */
     font-family: 'Impact', 'Arial Black', sans-serif;
     letter-spacing: 2px;
 }
@@ -17,9 +17,10 @@ h1 {
 #setup-container, #game-container {
     padding: 20px;
     border-radius: 10px;
-    background-color: #fff8f8;
+    background-color: #fff8f8; /* 薄いピンクのコンテナ背景 */
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     text-align: center;
+    margin-bottom: 20px;
 }
 #setup-container {
     width: 350px;
@@ -32,7 +33,7 @@ h1 {
     font-size: 1.5rem;
     font-weight: bold;
     color: #d81b60;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
 }
 
 #custom-board-input {
@@ -40,7 +41,7 @@ h1 {
     height: 150px;
     margin-top: 10px;
     border-radius: 8px;
-    border: 1px solid #f0b0c0;
+    border: 1px solid #f0b0c0; /* 薄いピンクのボーダー */
     padding: 10px;
     resize: none;
     font-family: monospace;
@@ -51,53 +52,64 @@ h1 {
 
 #sudoku-grid {
     display: grid;
-    grid-template-columns: repeat(9, 40px);
-    grid-template-rows: repeat(9, 40px);
-    border: 3px solid #d81b60;
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    grid-template-columns: repeat(9, 40px); /* 9列の40px幅 */
+    grid-template-rows: repeat(9, 40px);    /* 9行の40px高さ */
+    border: 3px solid #d81b60; /* 全体の枠を濃いピンクに */
+    border-radius: 8px; /* 角を丸く */
+    overflow: hidden; /* 角丸で内容がはみ出さないように */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 影を追加 */
 }
 
 .cell {
     width: 40px;
     height: 40px;
-    border: 1px solid #f0b0c0;
+    border: 1px solid #f0b0c0; /* 薄いピンクの罫線 */
     display: flex;
-    flex-direction: column;
+    flex-direction: column; /* メモと数字を縦に並べるため */
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
     font-weight: bold;
     background-color: #fff;
-    box-sizing: border-box;
-    position: relative;
+    box-sizing: border-box; /* パディングとボーダーを幅に含める */
+    position: relative; /* メモ配置のため */
     cursor: pointer;
 }
 
-/* 3x3ブロックの境界線 */
-.cell:nth-child(3n+1) {
-    border-left: 3px solid #d81b60;
+/* 3x3ブロックの境界線（太線） */
+/* 縦の太線 */
+.cell:nth-child(3n+1) { /* 1, 4, 7列目のセル（グリッド全体の3の倍数位置） */
+    border-left: 2px solid #d81b60;
 }
-.cell:nth-child(9n+1) {
-    border-left: 1px solid #f0b0c0;
+.cell:nth-child(9n+1):nth-child(n) { /* 各行の最初のセル */
+    border-left: 1px solid #f0b0c0; /* 上書きして細い線に戻す */
 }
-.cell:nth-child(9n+4) {
-    border-left: 3px solid #d81b60;
+.cell:nth-child(9n+4), .cell:nth-child(9n+7) { /* 4, 7列目のセル */
+    border-left: 2px solid #d81b60;
 }
-.cell:nth-child(9n+7) {
-    border-left: 3px solid #d81b60;
+
+
+/* 横の太線 */
+.cell:nth-child(n+19):nth-child(-n+27), /* 3行目の下 */
+.cell:nth-child(n+46):nth-child(-n+54) { /* 6行目の下 */
+    border-bottom: 2px solid #d81b60;
 }
-.cell:nth-child(n) {
+
+/* 各セルの右と下の細い線 */
+.cell:not(:nth-child(9n)) { /* 9列目以外の右線 */
+    border-right: 1px solid #f0b0c0;
+}
+.cell:nth-child(n):not(:nth-child(n+73)) { /* 9行目以外の底線 */
     border-bottom: 1px solid #f0b0c0;
 }
-.cell:nth-child(27n+1), .cell:nth-child(27n+2), .cell:nth-child(27n+3),
-.cell:nth-child(27n+4), .cell:nth-child(27n+5), .cell:nth-child(27n+6),
-.cell:nth-child(27n+7), .cell:nth-child(27n+8), .cell:nth-child(27n+9) {
-    border-bottom: 3px solid #d81b60;
+
+/* オーバーライドして太い線を優先 */
+.cell:nth-child(9n+3), .cell:nth-child(9n+6) {
+    border-right: 2px solid #d81b60;
 }
-.cell:nth-child(81) {
-    border-bottom: 3px solid #d81b60;
+.cell:nth-child(n+27):nth-child(-n+27), /* 3行目の最後 */
+.cell:nth-child(n+54):nth-child(-n+54) { /* 6行目の最後 */
+    border-bottom: 2px solid #d81b60;
 }
 
 
@@ -107,40 +119,42 @@ input {
     text-align: center;
     border: none;
     font-size: 1.2rem;
-    background-color: transparent;
+    background-color: transparent; /* 背景透過 */
     border-radius: 4px;
-    outline: none;
+    outline: none; /* フォーカス時の枠線を消す */
     padding: 0;
-    caret-color: transparent;
-    position: absolute;
+    caret-color: transparent; /* カーソルを非表示にする */
+    position: absolute; /* 親要素の.cellに合わせる */
     top: 0;
     left: 0;
 }
 .cell input:focus {
-    background-color: #fff0f5;
+    background-color: #fff0f5; /* フォーカス時の背景色 */
 }
 
 .fixed {
-    background-color: #fce4ec;
-    color: #880e4f;
-    cursor: default;
+    background-color: #fce4ec; /* 初期表示の数字の背景色 */
+    color: #880e4f; /* 濃い文字色 */
+    cursor: default; /* カーソル変更なし */
 }
 .selected {
-    border: 2px solid #f06292 !important;
-    background-color: #fff0f5;
+    border: 2px solid #f06292 !important; /* 選択時のボーダー */
+    background-color: #fff0f5; /* 選択時の背景色 */
 }
-.cell.selected input:focus {
+/* 選択状態の入力欄も同様の背景色 */
+.cell.selected input {
     background-color: #fff0f5;
 }
 
+
 .notes {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(3, 1fr); /* 3x3のメモグリッド */
     width: 100%;
     height: 100%;
-    font-size: 0.6rem;
-    line-height: 1;
-    color: #999;
+    font-size: 0.6rem; /* 小さいフォント */
+    line-height: 1; /* 行の高さを詰める */
+    color: #999; /* 薄いグレー */
     position: absolute;
     top: 0;
     left: 0;
@@ -168,27 +182,27 @@ input {
 .num-button, #note-mode-toggle {
     width: 50px;
     height: 50px;
-    border-radius: 50%;
-    background-color: #f48fb1;
+    border-radius: 50%; /* 丸いボタン */
+    background-color: #f48fb1; /* ピンクのボタン */
     color: white;
     font-size: 1.5rem;
     font-weight: bold;
     border: none;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    transition: background-color 0.2s;
+    transition: background-color 0.2s; /* ホバーエフェクト */
 }
 .num-button:hover, #note-mode-toggle:hover {
-    background-color: #ec407a;
+    background-color: #ec407a; /* ホバー時の色 */
 }
 #note-mode-toggle {
-    width: auto;
-    border-radius: 25px;
+    width: auto; /* 幅を自動調整 */
+    border-radius: 25px; /* 丸い角の長方形 */
     padding: 0 15px;
     font-size: 1rem;
 }
 #note-mode-toggle.active {
-    background-color: #a00037;
+    background-color: #a00037; /* アクティブ時の色 */
 }
 
 .buttons {
@@ -198,11 +212,11 @@ input {
 }
 
 .buttons button, #start-button {
-    background-color: #d81b60;
+    background-color: #d81b60; /* 濃いピンク */
     color: white;
     padding: 10px 20px;
     border: none;
-    border-radius: 20px;
+    border-radius: 20px; /* 丸いボタン */
     cursor: pointer;
     font-size: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
@@ -210,5 +224,5 @@ input {
 }
 
 .buttons button:hover, #start-button:hover {
-    background-color: #a00037;
+    background-color: #a00037; /* ホバー時の色 */
 }
