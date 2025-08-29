@@ -4,7 +4,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkButton = document.getElementById('check-button');
     const resetButton = document.getElementById('reset-button');
     const updateDateElement = document.getElementById('update-date');
-
     const noteModeToggle = document.createElement('button');
     noteModeToggle.id = 'note-mode-toggle';
     noteModeToggle.textContent = 'メモモード';
@@ -68,31 +67,6 @@ document.addEventListener('DOMContentLoaded', () => {
                             input.blur();
                         }
                     });
-
-                    // キーボード入力の処理
-                    input.addEventListener('keydown', (e) => {
-                        if (e.key === 'Backspace' || e.key === 'Delete') {
-                            e.preventDefault();
-                            if (selectedInput) {
-                                selectedInput.value = '';
-                                clearNotes(selectedCell);
-                            }
-                        } else if (/^[1-9]$/.test(e.key)) {
-                            e.preventDefault();
-                            if (selectedCell && !selectedCell.classList.contains('fixed')) {
-                                if (noteMode) {
-                                    toggleNote(selectedCell, parseInt(e.key));
-                                } else {
-                                    selectedInput.value = e.key;
-                                    clearNotes(selectedCell);
-                                }
-                            }
-                        } else if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt' || e.key === 'Tab' || e.key === 'Meta') {
-                            // 特殊キーは許可
-                        } else {
-                            e.preventDefault();
-                        }
-                    });
                     
                     // IME入力対応
                     input.addEventListener('input', (e) => {
@@ -106,6 +80,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     }
+    
+    // キーボード入力の処理をdocumentに移行
+    document.addEventListener('keydown', (e) => {
+        if (selectedCell && !selectedCell.classList.contains('fixed')) {
+            if (e.key === 'Backspace' || e.key === 'Delete') {
+                e.preventDefault();
+                if (selectedInput) {
+                    selectedInput.value = '';
+                    clearNotes(selectedCell);
+                }
+            } else if (/^[1-9]$/.test(e.key)) {
+                e.preventDefault();
+                if (noteMode) {
+                    toggleNote(selectedCell, parseInt(e.key));
+                } else {
+                    selectedInput.value = e.key;
+                    clearNotes(selectedCell);
+                }
+            } else if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt' || e.key === 'Tab' || e.key === 'Meta') {
+                // 特殊キーは許可
+            } else {
+                e.preventDefault();
+            }
+        }
+    });
 
     function createNumberButtons() {
         for (let i = 1; i <= 9; i++) {
