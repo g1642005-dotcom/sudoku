@@ -25,8 +25,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedCell = null;
     let selectedInput = null;
     let noteMode = false;
+    let initialBoard = null;
+    let board = null;
 
-    // ランダムな数独問題を生成する関数（仮）
+    // ランダムな数独問題を生成する関数
     function generateRandomBoard() {
         const boards = [
             [5, 3, 0, 0, 7, 0, 0, 0, 0],
@@ -38,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             [0, 6, 0, 0, 0, 0, 2, 8, 0],
             [0, 0, 0, 4, 1, 9, 0, 0, 5],
             [0, 0, 0, 0, 8, 0, 0, 7, 9],
+            // 新しい問題を追加
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 3, 0, 8, 5],
             [0, 0, 1, 0, 2, 0, 0, 0, 0],
@@ -49,11 +52,8 @@ document.addEventListener('DOMContentLoaded', () => {
             [0, 0, 0, 0, 4, 0, 0, 0, 9]
         ];
         const randomIndex = Math.floor(Math.random() * boards.length);
-        return JSON.parse(JSON.stringify(boards[randomIndex]));
+        return boards[randomIndex];
     }
-
-    let initialBoard = generateRandomBoard();
-    let board = JSON.parse(JSON.stringify(initialBoard));
 
     function createBoard(boardToRender) {
         sudokuGrid.innerHTML = '';
@@ -208,8 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // カスタムゲームボタンのイベントリスナー
     customGameButton.addEventListener('click', () => {
-        modal.classList.remove('modal-hidden');
-        modal.style.display = 'flex'; // ポップアップを表示
+        modal.style.display = 'flex';
     });
 
     // ポップアップ内のボタンイベントリスナー
@@ -226,13 +225,11 @@ document.addEventListener('DOMContentLoaded', () => {
         initialBoard = newBoard;
         board = JSON.parse(JSON.stringify(initialBoard));
         createBoard(board);
-        modal.classList.add('modal-hidden');
-        modal.style.display = 'none'; // ポップアップを非表示
+        modal.style.display = 'none';
     });
 
     closeModalButton.addEventListener('click', () => {
-        modal.classList.add('modal-hidden');
-        modal.style.display = 'none'; // ポップアップを非表示
+        modal.style.display = 'none';
     });
 
     // サーバーの最終更新日を取得して表示
@@ -258,7 +255,9 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // 初期化
+    // 初期化：ページロード時にランダムな問題を生成して表示
+    initialBoard = generateRandomBoard();
+    board = JSON.parse(JSON.stringify(initialBoard));
     createBoard(board);
     createNumberButtons();
 });
