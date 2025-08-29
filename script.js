@@ -1,89 +1,22 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const setupContainer = document.getElementById('setup-container');
-    const gameContainer = document.getElementById('game-container');
-    const randomModeRadio = document.getElementById('random-mode');
-    const customModeRadio = document.getElementById('custom-mode');
-    const customBoardInput = document.getElementById('custom-board-input');
-    const startButton = document =getElementById('start-button');
     const sudokuGrid = document.getElementById('sudoku-grid');
     const numberButtonsContainer = document.getElementById('number-buttons');
-    const noteModeToggle = document.getElementById('note-mode-toggle');
-    const checkButton = document.getElementById('check-button');
-    const resetButton = document.getElementById('reset-button');
-    const timerDisplay = document.getElementById('timer');
-
     let selectedCell = null;
-    let noteMode = false;
-    let timerInterval = null;
-    let startTime = null;
+    let selectedInput = null;
 
-    const randomBoards = [
-        [
-            [5, 3, 0, 0, 7, 0, 0, 0, 0],
-            [6, 0, 0, 1, 9, 5, 0, 0, 0],
-            [0, 9, 8, 0, 0, 0, 0, 6, 0],
-            [8, 0, 0, 0, 6, 0, 0, 0, 3],
-            [4, 0, 0, 8, 0, 3, 0, 0, 1],
-            [7, 0, 0, 0, 2, 0, 0, 0, 6],
-            [0, 6, 0, 0, 0, 0, 2, 8, 0],
-            [0, 0, 0, 4, 1, 9, 0, 0, 5],
-            [0, 0, 0, 0, 8, 0, 0, 7, 9]
-        ],
+    const board = [
+        [5, 3, 0, 0, 7, 0, 0, 0, 0],
+        [6, 0, 0, 1, 9, 5, 0, 0, 0],
+        [0, 9, 8, 0, 0, 0, 0, 6, 0],
+        [8, 0, 0, 0, 6, 0, 0, 0, 3],
+        [4, 0, 0, 8, 0, 3, 0, 0, 1],
+        [7, 0, 0, 0, 2, 0, 0, 0, 6],
+        [0, 6, 0, 0, 0, 0, 2, 8, 0],
+        [0, 0, 0, 4, 1, 9, 0, 0, 5],
+        [0, 0, 0, 0, 8, 0, 0, 7, 9]
     ];
 
-    let currentBoard = [];
-
-    customModeRadio.addEventListener('change', () => {
-        customBoardInput.classList.remove('hidden');
-    });
-    randomModeRadio.addEventListener('change', () => {
-        customBoardInput.classList.add('hidden');
-    });
-
-    startButton.addEventListener('click', () => {
-        setupContainer.classList.add('hidden');
-        gameContainer.classList.remove('hidden');
-        
-        if (customModeRadio.checked) {
-            try {
-                const input = `[${customBoardInput.value}]`;
-                currentBoard = JSON.parse(input.replace(/\s/g, ''));
-                if (!Array.isArray(currentBoard) || currentBoard.length !== 9 || !currentBoard.every(row => Array.isArray(row) && row.length === 9)) {
-                    throw new Error("Invalid board format");
-                }
-            } catch (e) {
-                alert("問題の形式が正しくありません。9x9の配列形式で入力してください。");
-                gameContainer.classList.add('hidden');
-                setupContainer.classList.remove('hidden');
-                return;
-            }
-        } else {
-            currentBoard = JSON.parse(JSON.stringify(randomBoards[0]));
-        }
-
-        createBoard(currentBoard);
-        createNumberButtons();
-        startTimer();
-    });
-
-    function startTimer() {
-        startTime = Date.now();
-        timerInterval = setInterval(() => {
-            const elapsedTime = Date.now() - startTime;
-            const hours = Math.floor(elapsedTime / 3600000);
-            const minutes = Math.floor((elapsedTime % 3600000) / 60000);
-            const seconds = Math.floor((elapsedTime % 60000) / 1000);
-
-            const format = (num) => String(num).padStart(2, '0');
-            timerDisplay.textContent = `${format(hours)}:${format(minutes)}:${format(seconds)}`;
-        }, 1000);
-    }
-
-    function stopTimer() {
-        clearInterval(timerInterval);
-    }
-
-    function createBoard(board) {
+    function createBoard() {
         sudokuGrid.innerHTML = '';
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
@@ -99,31 +32,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     const input = document.createElement('input');
                     input.type = 'text';
                     input.maxLength = 1;
+                    input.dataset.row = row;
+                    input.dataset.col = col;
                     cell.appendChild(input);
 
-                    cell.addEventListener('click', () => {
+                    input.addEventListener('click', (event) => {
                         if (selectedCell) {
                             selectedCell.classList.remove('selected');
                         }
-                        selectedCell = cell;
+                        selectedCell = event.target.closest('.cell');
+                        selectedInput = event.target;
                         selectedCell.classList.add('selected');
-
-                        if (!noteMode) {
-                            input.focus();
-                        }
                     });
 
-                    // キーボード入力に対応 (メモモード切り替え)
-                    input.addEventListener('keydown', (e) => {
-                        if (e.key === 'Control') {
-                            noteMode = true;
-                            noteModeToggle.classList.add('active');
-                        }
-                    });
-                    input.addEventListener('keyup', (e) => {
-                        if (e.key === 'Control') {
-                            noteMode = false;
-                            noteModeToggle.classList.remove('active');
+                    // キーボード入力に対応
+                    input.addEventListener('input', (event) => {
+                        const value = event.target.value;
+                        if (!/^[1-9]$/.test(value)) {
+                            event.target.value = '';
                         }
                     });
                 }
@@ -133,120 +59,19 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function createNumberButtons() {
-        numberButtonsContainer.innerHTML = '';
         for (let i = 1; i <= 9; i++) {
             const button = document.createElement('button');
             button.classList.add('num-button');
             button.textContent = i;
             button.addEventListener('click', () => {
-                if (selectedCell && !selectedCell.classList.contains('fixed')) {
-                    if (noteMode) {
-                        toggleNote(selectedCell, i);
-                    } else {
-                        const inputElement = selectedCell.querySelector('input');
-                        if (inputElement) {
-                            inputElement.value = i;
-                            inputElement.dispatchEvent(new Event('input'));
-                        }
-                    }
+                if (selectedInput) {
+                    selectedInput.value = i;
                 }
             });
             numberButtonsContainer.appendChild(button);
         }
-
-        noteModeToggle.addEventListener('click', () => {
-            noteMode = !noteMode;
-            if (noteMode) {
-                noteModeToggle.classList.add('active');
-                if (selectedCell && selectedCell.querySelector('input')) {
-                     selectedCell.querySelector('input').blur();
-                }
-            } else {
-                noteModeToggle.classList.remove('active');
-                if (selectedCell && selectedCell.querySelector('input')) {
-                     selectedCell.querySelector('input').focus();
-                }
-            }
-        });
     }
 
-    function toggleNote(cell, number) {
-        let notesDiv = cell.querySelector('.notes');
-        if (!notesDiv) {
-            notesDiv = document.createElement('div');
-            notesDiv.classList.add('notes');
-            cell.appendChild(notesDiv);
-        }
-
-        const existingNote = notesDiv.querySelector(`.note-${number}`);
-        if (existingNote) {
-            existingNote.remove();
-        } else {
-            const noteSpan = document.createElement('span');
-            noteSpan.classList.add('notes-cell', `note-${number}`);
-            noteSpan.textContent = number;
-            notesDiv.appendChild(noteSpan);
-        }
-
-        const inputElement = cell.querySelector('input');
-        if (inputElement) {
-            inputElement.value = '';
-        }
-    }
-
-    checkButton.addEventListener('click', () => {
-        const solution = [];
-        let isSolved = true;
-        const cells = sudokuGrid.querySelectorAll('.cell');
-
-        for (let i = 0; i < 81; i++) {
-            const cell = cells[i];
-            const value = cell.querySelector('input')?.value || cell.textContent;
-            solution.push(value === '' ? 0 : parseInt(value));
-        }
-
-        const solvedBoard = [];
-        for (let i = 0; i < 9; i++) {
-            solvedBoard.push(solution.slice(i * 9, (i + 1) * 9));
-        }
-
-        for (let i = 0; i < 9; i++) {
-            const row = solvedBoard[i];
-            const col = solvedBoard.map(r => r[i]);
-            const box = [];
-            const boxRowStart = Math.floor(i / 3) * 3;
-            const boxColStart = (i % 3) * 3;
-
-            for (let r = 0; r < 3; r++) {
-                for (let c = 0; c < 3; c++) {
-                    box.push(solvedBoard[boxRowStart + r][boxColStart + c]);
-                }
-            }
-
-            const checkSet = (arr) => {
-                const filtered = arr.filter(n => n !== 0);
-                return new Set(filtered).size === filtered.length;
-            };
-
-            if (!checkSet(row) || !checkSet(col) || !checkSet(box)) {
-                isSolved = false;
-                break;
-            }
-        }
-
-        if (isSolved) {
-            stopTimer();
-            const time = timerDisplay.textContent;
-            alert(`正解です！クリアタイム: ${time}`);
-        } else {
-            alert("残念、まだ間違いがあります。");
-        }
-    });
-
-    resetButton.addEventListener('click', () => {
-        stopTimer();
-        gameContainer.classList.add('hidden');
-        setupContainer.classList.remove('hidden');
-    });
-
+    createBoard();
+    createNumberButtons();
 });
