@@ -1,69 +1,131 @@
+:root {
+    --bg-color: #f0f2f5;
+    --panel-bg: #ffffff;
+    --text-color: #333;
+    --grid-border: #7f8c8d;
+    --cell-border: #bdc3c7;
+    --fixed-cell-bg: #ecf0f1;
+    --fixed-text-color: #2c3e50;
+    --input-bg-color: #f7f9fb;
+    --selected-border: #3498db;
+    --button-bg: #34495e;
+    --button-hover-bg: #2c3e50;
+    --button-text-color: #ffffff;
+    --note-color: #95a5a6;
+    --action-btn-bg: #e0e6e9;
+    --action-btn-hover-bg: #bdc3c7;
+    --action-btn-icon: #34495e;
+}
+
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+    margin: 0;
+    color: var(--text-color);
+}
+
+#app-container {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    padding: 20px;
+    background-color: var(--panel-bg);
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+    align-items: flex-start;
+    max-width: 1200px;
+    width: 95%;
+}
+
+#main-content {
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #ffe0e6;
-    margin-top: 20px;
-    color: #444;
+    gap: 20px;
 }
 
 h1 {
-    color: #d81b60;
-    font-family: 'Impact', 'Arial Black', sans-serif;
-    letter-spacing: 2px;
+    color: var(--text-color);
+    font-size: 2.5rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin: 0;
 }
 
-#game-container {
-    padding: 20px;
-    border-radius: 10px;
-    background-color: #fff8f8;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    text-align: center;
-    margin-bottom: 20px;
+#controls-panel {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    flex-grow: 1;
+}
+
+#top-controls {
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-size: 0.8rem;
+    color: var(--note-color);
+}
+
+.stat-value {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: var(--text-color);
 }
 
 #sudoku-grid {
     display: grid;
-    grid-template-columns: repeat(9, 40px);
-    grid-template-rows: repeat(9, 40px);
-    border: 3px solid #d81b60;
+    grid-template-columns: repeat(9, 45px);
+    grid-template-rows: repeat(9, 45px);
+    border: 3px solid var(--grid-border);
     border-radius: 8px;
     overflow: hidden;
     box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
 .cell {
-    width: 40px;
-    height: 40px;
-    border: 1px solid #f0b0c0;
+    width: 45px;
+    height: 45px;
+    border: 1px solid var(--cell-border);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: bold;
-    background-color: #fff;
+    background-color: var(--panel-bg);
     box-sizing: border-box;
     position: relative;
-    cursor: pointer;
+    cursor: default; /* カーソルをデフォルトに設定 */
 }
 
 .cell:nth-child(9n+4), .cell:nth-child(9n+7) {
-    border-left: 2px solid #d81b60;
+    border-left: 2px solid var(--grid-border);
 }
 .cell:nth-child(n) {
-    border-bottom: 1px solid #f0b0c0;
+    border-bottom: 1px solid var(--cell-border);
 }
 .cell:nth-child(n+19):nth-child(-n+27),
 .cell:nth-child(n+46):nth-child(-n+54) {
-    border-bottom: 3px solid #d81b60;
+    border-bottom: 3px solid var(--grid-border);
 }
 .cell:nth-child(1), .cell:nth-child(10), .cell:nth-child(19), .cell:nth-child(28), .cell:nth-child(37), .cell:nth-child(46), .cell:nth-child(55), .cell:nth-child(64), .cell:nth-child(73) {
-    border-left: 1px solid #f0b0c0;
+    border-left: 1px solid var(--cell-border);
 }
 .cell:nth-child(9n) {
-    border-right: 1px solid #f0b0c0;
+    border-right: 1px solid var(--cell-border);
 }
 
 input {
@@ -71,7 +133,8 @@ input {
     height: 100%;
     text-align: center;
     border: none;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
+    font-weight: bold;
     background-color: transparent;
     border-radius: 4px;
     outline: none;
@@ -80,19 +143,20 @@ input {
     position: absolute;
     top: 0;
     left: 0;
+    cursor: default; /* カーソルをデフォルトに設定 */
 }
 .cell input:focus {
-    background-color: #fff0f5;
+    background-color: var(--input-bg-color);
 }
 
 .fixed {
-    background-color: #fce4ec;
-    color: #880e4f;
+    background-color: var(--fixed-cell-bg);
+    color: var(--fixed-text-color);
     cursor: default;
 }
 .selected {
-    border: 2px solid #f06292 !important;
-    background-color: #fff0f5;
+    border: 2px solid var(--selected-border) !important;
+    background-color: var(--input-bg-color);
 }
 
 .notes {
@@ -101,9 +165,9 @@ input {
     grid-template-rows: repeat(3, 1fr);
     width: 100%;
     height: 100%;
-    font-size: 0.6rem;
+    font-size: 0.7rem;
     line-height: 1;
-    color: #999;
+    color: var(--note-color);
     position: absolute;
     top: 0;
     left: 0;
@@ -121,70 +185,83 @@ input {
 .note-8 { grid-column: 2; grid-row: 3; }
 .note-9 { grid-column: 3; grid-row: 3; }
 
-#controls {
+#action-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+}
+.action-btn {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background-color: var(--action-btn-bg);
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.2s;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 15px;
-    margin-top: 20px;
 }
+.action-btn:hover {
+    background-color: var(--action-btn-hover-bg);
+}
+.action-btn svg {
+    width: 24px;
+    height: 24px;
+    stroke: var(--action-btn-icon);
+}
+
 #number-buttons {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 10px;
+    width: 100%;
+    margin-top: 10px;
 }
-.num-button, #note-mode-toggle {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: #f48fb1;
-    color: white;
-    font-size: 1.5rem;
+
+.num-button {
+    width: 60px;
+    height: 60px;
+    border-radius: 8px;
+    background-color: var(--button-bg);
+    color: var(--button-text-color);
+    font-size: 1.8rem;
     font-weight: bold;
     border: none;
     cursor: pointer;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: background-color 0.2s;
 }
-.num-button:hover, #note-mode-toggle:hover {
-    background-color: #ec407a;
-}
-#note-mode-toggle {
-    width: auto;
-    border-radius: 25px;
-    padding: 0 15px;
-    font-size: 1rem;
-}
-#note-mode-toggle.active {
-    background-color: #a00037;
+.num-button:hover {
+    background-color: var(--button-hover-bg);
 }
 
-.buttons {
+#bottom-buttons {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin-top: 20px;
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
 }
-.buttons button {
-    background-color: #d81b60;
-    color: white;
-    padding: 10px 20px;
+#bottom-buttons button {
+    background-color: var(--button-bg);
+    color: var(--button-text-color);
+    padding: 12px 24px;
     border: none;
-    border-radius: 20px;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 1rem;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     transition: background-color 0.2s;
 }
-.buttons button:hover {
-    background-color: #a00037;
+#bottom-buttons button:hover {
+    background-color: var(--button-hover-bg);
 }
 
 #update-info {
     font-size: 0.8rem;
-    color: #888;
+    color: var(--note-color);
     margin-top: 20px;
 }
 
@@ -196,13 +273,13 @@ input {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    display: none; /* ここが重要 */
+    display: none;
     justify-content: center;
     align-items: center;
     z-index: 1000;
 }
 #modal-content {
-    background-color: #fff8f8;
+    background-color: var(--panel-bg);
     padding: 30px;
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
@@ -211,7 +288,7 @@ input {
     text-align: center;
 }
 #modal-content h2 {
-    color: #d81b60;
+    color: var(--text-color);
     margin-top: 0;
 }
 #custom-board-input {
@@ -219,7 +296,7 @@ input {
     height: 120px;
     margin: 15px 0;
     padding: 10px;
-    border: 1px solid #f0b0c0;
+    border: 1px solid var(--cell-border);
     border-radius: 8px;
     resize: none;
     font-family: monospace;
@@ -230,16 +307,9 @@ input {
     gap: 15px;
 }
 .modal-buttons button {
-    background-color: #d81b60;
-    color: white;
+    background-color: var(--button-bg);
+    color: var(--button-text-color);
     padding: 10px 20px;
     border: none;
     border-radius: 20px;
-    cursor: pointer;
-    font-size: 1rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    transition: background-color 0.2s;
-}
-.modal-buttons button:hover {
-    background-color: #a00037;
-}
+    cursor:
