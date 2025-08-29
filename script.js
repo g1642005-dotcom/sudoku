@@ -78,11 +78,13 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                         } else if (/^[1-9]$/.test(e.key)) {
                             e.preventDefault();
-                            if (noteMode) {
-                                toggleNote(selectedCell, parseInt(e.key));
-                            } else {
-                                selectedInput.value = e.key;
-                                clearNotes(selectedCell);
+                            if (selectedCell) {
+                                if (noteMode) {
+                                    toggleNote(selectedCell, parseInt(e.key));
+                                } else {
+                                    selectedInput.value = e.key;
+                                    clearNotes(selectedCell);
+                                }
                             }
                         } else if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt') {
                             // Control, Shift, Altは許可
