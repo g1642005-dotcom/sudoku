@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
                             }
                         } else if (/^[1-9]$/.test(e.key)) {
                             e.preventDefault();
-                            if (selectedCell) {
+                            if (selectedCell && !selectedCell.classList.contains('fixed')) {
                                 if (noteMode) {
                                     toggleNote(selectedCell, parseInt(e.key));
                                 } else {
