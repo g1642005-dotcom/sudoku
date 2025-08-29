@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     cell.classList.add('fixed');
                 } else {
                     const input = document.createElement('input');
-                    input.type = 'text';
+                    input.type = 'tel'; // IMEを無効化するために'tel'に変更
                     input.maxLength = 1;
                     input.dataset.row = row;
                     input.dataset.col = col;
@@ -81,11 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
                     
-                    // IME入力対応
+                    // IME入力対応と上書き
                     input.addEventListener('input', (e) => {
                         const value = e.target.value;
-                        if (!/^[1-9]$/.test(value)) {
-                            e.target.value = '';
+                        if (!/^[1-9]$/.test(value) && value !== '') {
+                             e.target.value = '';
+                        }
+                        if (selectedCell) {
+                            clearNotes(selectedCell);
                         }
                     });
                 }
