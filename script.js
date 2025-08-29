@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
 
+                    // キーボード入力の処理
                     input.addEventListener('keydown', (e) => {
                         if (e.key === 'Backspace' || e.key === 'Delete') {
                             e.preventDefault();
@@ -86,9 +87,18 @@ document.addEventListener('DOMContentLoaded', () => {
                                     clearNotes(selectedCell);
                                 }
                             }
-                        } else if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt') {
+                        } else if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt' || e.key === 'Tab' || e.key === 'Meta') {
+                            // 特殊キーは許可
                         } else {
                             e.preventDefault();
+                        }
+                    });
+                    
+                    // IME入力対応
+                    input.addEventListener('input', (e) => {
+                        const value = e.target.value;
+                        if (!/^[1-9]$/.test(value)) {
+                            e.target.value = '';
                         }
                     });
                 }
@@ -176,6 +186,7 @@ document.addEventListener('DOMContentLoaded', () => {
     createNumberButtons();
     
     // サーバーの最終更新日を取得して表示
+    const updateDateElement = document.getElementById('update-date');
     if (updateDateElement) {
         fetch('script.js', { method: 'HEAD' })
             .then(response => {
