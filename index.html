@@ -10,17 +10,36 @@
 
     <h1>数独</h1>
 
-    <div id="sudoku-grid">
+    <div id="setup-container">
+        <h2>ゲーム設定</h2>
+        <div class="mode-selection">
+            <input type="radio" id="random-mode" name="game-mode" value="random" checked>
+            <label for="random-mode">ランダム問題でプレイ</label>
+            <input type="radio" id="custom-mode" name="game-mode" value="custom">
+            <label for="custom-mode">自分で問題を入力</label>
         </div>
-
-    <div id="number-buttons">
-        </div>
-
-    <div class="buttons">
-        <button id="check-button">解答チェック</button>
-        <button id="reset-button">リセット</button>
+        <textarea id="custom-board-input" placeholder="ここに問題を&#10;[5, 3, 0, 0, 7, 0, 0, 0, 0],&#10;[6, 0, 0, 1, 9, 5, 0, 0, 0],&#10;...&#10;と入力してください" rows="10"></textarea>
+        <button id="start-button">ゲームスタート</button>
     </div>
 
+    <div id="game-container" class="hidden">
+        <div id="timer">00:00:00</div>
+        
+        <div id="sudoku-grid">
+            </div>
+
+        <div id="controls">
+            <div id="number-buttons">
+                </div>
+            <button id="note-mode-toggle">メモモード</button>
+        </div>
+        
+        <div class="buttons">
+            <button id="check-button">解答チェック</button>
+            <button id="reset-button">リセット</button>
+        </div>
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
