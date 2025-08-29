@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkButton = document.getElementById('check-button');
     const resetButton = document.getElementById('reset-button');
     const updateDateElement = document.getElementById('update-date');
+
     const noteModeToggle = document.createElement('button');
     noteModeToggle.id = 'note-mode-toggle';
     noteModeToggle.textContent = 'メモモード';
@@ -198,30 +199,23 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     startButton.addEventListener('click', () => {
-        const input = customBoardInput.value;
-        try {
-            const parsedBoard = JSON.parse(input);
-            if (Array.isArray(parsedBoard) && parsedBoard.length === 9) {
-                const isValid = parsedBoard.every(row => 
-                    Array.isArray(row) && 
-                    row.length === 9 && 
-                    row.every(num => typeof num === 'number' && (num >= 0 && num <= 9))
-                );
-                if (isValid) {
-                    board = parsedBoard;
-                    customSetup.classList.add('hidden');
-                    gameContainer.classList.remove('hidden');
-                    createBoard(board);
-                    createNumberButtons();
-                } else {
-                    alert('入力された形式が正しくありません。各行が9つの数字の配列になっているか確認してください。');
-                }
-            } else {
-                alert('入力された形式が正しくありません。9つの行の配列になっているか確認してください。');
-            }
-        } catch (e) {
-            alert('入力された形式が正しくありません。JSON形式（例: [..., ...]）で入力してください。');
+        const inputString = customBoardInput.value.replace(/[^0-9]/g, ''); // 数字以外を除去
+        
+        if (inputString.length !== 81) {
+            alert('入力された文字列の長さが正しくありません。数字81個で入力してください。');
+            return;
         }
+
+        const newBoard = [];
+        for (let i = 0; i < 9; i++) {
+            newBoard.push(inputString.slice(i * 9, (i + 1) * 9).split('').map(Number));
+        }
+
+        board = newBoard;
+        customSetup.classList.add('hidden');
+        gameContainer.classList.remove('hidden');
+        createBoard(board);
+        createNumberButtons();
     });
 
     // サーバーの最終更新日を取得して表示
