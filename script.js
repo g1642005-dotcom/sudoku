@@ -122,4 +122,152 @@ document.addEventListener('DOMContentLoaded', () => {
                     selectedInput.value = '';
                     clearNotes(selectedCell);
                 }
-            } else if (/^[1-9]$/.test(e.key))
+            } else if (/^[1-9]$/.test(e.key)) {
+                e.preventDefault();
+                if (noteMode) {
+                    toggleNote(selectedCell, parseInt(e.key));
+                } else {
+                    selectedInput.value = e.key;
+                    clearNotes(selectedCell);
+                }
+            } else if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt' || e.key === 'Tab' || e.key === 'Meta') {
+            } else {
+                e.preventDefault();
+            }
+        }
+    });
+
+    function createNumberButtons() {
+        numberButtonsContainer.innerHTML = '';
+        for (let i = 1; i <= 9; i++) {
+            const button = document.createElement('button');
+            button.classList.add('num-button');
+            button.textContent = i;
+            button.addEventListener('click', () => {
+                if (selectedCell && !selectedCell.classList.contains('fixed')) {
+                    if (noteMode) {
+                        toggleNote(selectedCell, i);
+                    } else {
+                        clearNotes(selectedCell);
+                        const inputElement = selectedCell.querySelector('input');
+                        if (inputElement) {
+                            inputElement.value = i;
+                        }
+                    }
+                }
+            });
+            numberButtonsContainer.appendChild(button);
+        }
+    }
+
+    function toggleNote(cell, number) {
+        let notesDiv = cell.querySelector('.notes');
+        if (!notesDiv) {
+            notesDiv = document.createElement('div');
+            notesDiv.classList.add('notes');
+            cell.appendChild(notesDiv);
+        }
+        const existingNote = notesDiv.querySelector(`.note-${number}`);
+        if (existingNote) {
+            existingNote.remove();
+        } else {
+            const noteSpan = document.createElement('span');
+            noteSpan.classList.add('notes-cell', `note-${number}`);
+            noteSpan.textContent = number;
+            notesDiv.appendChild(noteSpan);
+        }
+        const inputElement = cell.querySelector('input');
+        if (inputElement) {
+            inputElement.value = '';
+        }
+    }
+
+    function clearNotes(cell) {
+        const notesDiv = cell.querySelector('.notes');
+        if (notesDiv) {
+            notesDiv.remove();
+        }
+    }
+
+    // 新しいボタンのイベントリスナー
+    newGameButton.addEventListener('click', generateAndSetNewBoard);
+    customGameButton.addEventListener('click', () => {
+        modal.style.display = 'flex';
+    });
+    startButton.addEventListener('click', () => {
+        const inputString = customBoardInput.value.replace(/[^0-9]/g, '');
+        if (inputString.length !== 81) {
+            alert('入力された文字列の長さが正しくありません。数字81個で入力してください。');
+            return;
+        }
+        const newBoard = [];
+        for (let i = 0; i < 9; i++) {
+            newBoard.push(inputString.slice(i * 9, (i + 1) * 9).split('').map(Number));
+        }
+        initialBoard = newBoard;
+        board = JSON.parse(JSON.stringify(initialBoard));
+        createBoard(board);
+        modal.style.display = 'none';
+    });
+    closeModalButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // 既存のボタンのイベントリスナーを新しい名前に変更
+    eraseButton.addEventListener('click', () => {
+        if (selectedCell && !selectedCell.classList.contains('fixed')) {
+            const inputElement = selectedCell.querySelector('input');
+            if (inputElement) {
+                inputElement.value = '';
+            }
+            clearNotes(selectedCell);
+        }
+    });
+
+    noteModeToggle.addEventListener('click', () => {
+        noteMode = !noteMode;
+        noteModeToggle.classList.toggle('active', noteMode);
+        if (selectedInput) {
+            if (noteMode) {
+                selectedInput.blur();
+            } else {
+                selectedInput.focus();
+            }
+        }
+    });
+    
+    // まだ機能が実装されていないボタンのダミー機能
+    undoButton.addEventListener('click', () => {
+        alert('「元に戻す」機能はまだ実装されていません。');
+    });
+    hintButton.addEventListener('click', () => {
+        alert('「ヒント」機能はまだ実装されていません。');
+    });
+
+    // サーバーの最終更新日を取得して表示
+    if (updateDateElement) {
+        fetch('script.js', { method: 'HEAD' })
+            .then(response => {
+                const lastModified = response.headers.get('Last-Modified');
+                if (lastModified) {
+                    const formattedDate = new Date(lastModified).toLocaleString('ja-JP', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: 'numeric',
+                        minute: 'numeric'
+                    });
+                    updateDateElement.textContent = formattedDate;
+                } else {
+                    updateDateElement.textContent = '不明';
+                }
+            })
+            .catch(() => {
+                updateDateElement.textContent = '取得エラー';
+            });
+    }
+
+    // 初期化：ページロード時にランダムな問題を生成して表示
+    generateAndSetNewBoard();
+    createNumberButtons();
+});
