@@ -4,12 +4,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const checkButton = document.getElementById('check-button');
     const resetButton = document.getElementById('reset-button');
 
-    // メモモード切り替えボタンを追加
     const noteModeToggle = document.createElement('button');
     noteModeToggle.id = 'note-mode-toggle';
     noteModeToggle.textContent = 'メモモード';
     
-    // buttonsコンテナを親要素として取得し、メモボタンを追加
     const buttonsContainer = document.querySelector('.buttons');
     if(buttonsContainer) {
         const controlsDiv = document.createElement('div');
@@ -66,7 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (!noteMode) {
                             input.focus();
                         } else {
-                            input.blur(); // メモモードならカーソルを外す
+                            input.blur();
+                        }
+                    });
+
+                    // キーボード入力の制限
+                    input.addEventListener('keydown', (e) => {
+                        if (!/^[1-9]$/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && !e.metaKey && !e.ctrlKey) {
+                            e.preventDefault();
                         }
                     });
                 }
@@ -85,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (noteMode) {
                         toggleNote(selectedCell, i);
                     } else {
+                        clearNotes(selectedCell); // 数字入力前にメモを消去
                         const inputElement = selectedCell.querySelector('input');
                         if (inputElement) {
                             inputElement.value = i;
@@ -98,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
         noteModeToggle.addEventListener('click', () => {
             noteMode = !noteMode;
             noteModeToggle.classList.toggle('active', noteMode);
-
             if (selectedInput) {
                 if (noteMode) {
                     selectedInput.blur();
@@ -126,10 +131,19 @@ document.addEventListener('DOMContentLoaded', () => {
             noteSpan.textContent = number;
             notesDiv.appendChild(noteSpan);
         }
-
+        
+        // メモを追加・削除したら、入力欄の数字を消す
         const inputElement = cell.querySelector('input');
         if (inputElement) {
             inputElement.value = '';
+        }
+    }
+
+    // メモを全て消去する関数
+    function clearNotes(cell) {
+        const notesDiv = cell.querySelector('.notes');
+        if (notesDiv) {
+            notesDiv.remove();
         }
     }
 
