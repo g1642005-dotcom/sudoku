@@ -31,12 +31,13 @@ body {
 #app-container {
     display: flex;
     flex-direction: row;
+    justify-content: center;
+    align-items: flex-start;
     gap: 30px;
     padding: 20px;
     background-color: var(--panel-bg);
     border-radius: 12px;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-    align-items: flex-start;
     max-width: 1200px;
     width: 95%;
 }
@@ -108,7 +109,13 @@ h1 {
     background-color: var(--panel-bg);
     box-sizing: border-box;
     position: relative;
-    cursor: default; /* カーソルをデフォルトに設定 */
+    cursor: default;
+}
+.cell:hover:not(.fixed) {
+    background-color: var(--input-bg-color);
+}
+.cell:hover:not(.fixed) input {
+    cursor: pointer;
 }
 
 .cell:nth-child(9n+4), .cell:nth-child(9n+7) {
@@ -143,7 +150,7 @@ input {
     position: absolute;
     top: 0;
     left: 0;
-    cursor: default; /* カーソルをデフォルトに設定 */
+    cursor: default;
 }
 .cell input:focus {
     background-color: var(--input-bg-color);
@@ -312,4 +319,11 @@ input {
     padding: 10px 20px;
     border: none;
     border-radius: 20px;
-    cursor:
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: background-color 0.2s;
+}
+.modal-buttons button:hover {
+    background-color: var(--button-hover-bg);
+}
