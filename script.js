@@ -30,33 +30,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 数独の問題リストを関数外で定義
     const allBoards = [
-        [5, 3, 0, 0, 7, 0, 0, 0, 0],
-        [6, 0, 0, 1, 9, 5, 0, 0, 0],
-        [0, 9, 8, 0, 0, 0, 0, 6, 0],
-        [8, 0, 0, 0, 6, 0, 0, 0, 3],
-        [4, 0, 0, 8, 0, 3, 0, 0, 1],
-        [7, 0, 0, 0, 2, 0, 0, 0, 6],
-        [0, 6, 0, 0, 0, 0, 2, 8, 0],
-        [0, 0, 0, 4, 1, 9, 0, 0, 5],
-        [0, 0, 0, 0, 8, 0, 0, 7, 9],
-        // 別の問題
-        [0, 0, 0, 0, 0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 3, 0, 8, 5],
-        [0, 0, 1, 0, 2, 0, 0, 0, 0],
-        [0, 0, 0, 5, 0, 7, 0, 0, 0],
-        [0, 0, 4, 0, 0, 0, 1, 0, 0],
-        [0, 9, 0, 0, 0, 0, 0, 0, 0],
-        [5, 0, 0, 0, 0, 0, 0, 7, 3],
-        [0, 0, 2, 0, 1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 4, 0, 0, 0, 9]
+        [
+            [5, 3, 0, 0, 7, 0, 0, 0, 0],
+            [6, 0, 0, 1, 9, 5, 0, 0, 0],
+            [0, 9, 8, 0, 0, 0, 0, 6, 0],
+            [8, 0, 0, 0, 6, 0, 0, 0, 3],
+            [4, 0, 0, 8, 0, 3, 0, 0, 1],
+            [7, 0, 0, 0, 2, 0, 0, 0, 6],
+            [0, 6, 0, 0, 0, 0, 2, 8, 0],
+            [0, 0, 0, 4, 1, 9, 0, 0, 5],
+            [0, 0, 0, 0, 8, 0, 0, 7, 9]
+        ],
+        [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 3, 0, 8, 5],
+            [0, 0, 1, 0, 2, 0, 0, 0, 0],
+            [0, 0, 0, 5, 0, 7, 0, 0, 0],
+            [0, 0, 4, 0, 0, 0, 1, 0, 0],
+            [0, 9, 0, 0, 0, 0, 0, 0, 0],
+            [5, 0, 0, 0, 0, 0, 0, 7, 3],
+            [0, 0, 2, 0, 1, 0, 0, 0, 0],
+            [0, 0, 0, 0, 4, 0, 0, 0, 9]
+        ],
+        [
+            [0, 0, 0, 6, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        ]
     ];
     
-    // ランダムな数独問題を生成する関数
-    function generateRandomBoard() {
+    // ランダムな数独問題を生成し、`initialBoard`と`board`を更新する関数
+    function generateAndSetNewBoard() {
         const randomIndex = Math.floor(Math.random() * allBoards.length);
         const selectedBoard = allBoards[randomIndex];
-        // 選択されたボードをコピーして返す
-        return JSON.parse(JSON.stringify(selectedBoard));
+        initialBoard = JSON.parse(JSON.stringify(selectedBoard));
+        board = JSON.parse(JSON.stringify(initialBoard));
+        createBoard(board);
     }
 
     function createBoard(boardToRender) {
@@ -204,11 +219,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // 新しいゲームボタンのイベントリスナー
-    newGameButton.addEventListener('click', () => {
-        initialBoard = generateRandomBoard();
-        board = JSON.parse(JSON.stringify(initialBoard));
-        createBoard(board);
-    });
+    newGameButton.addEventListener('click', generateAndSetNewBoard);
 
     // カスタムゲームボタンのイベントリスナー
     customGameButton.addEventListener('click', () => {
@@ -260,8 +271,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // 初期化：ページロード時にランダムな問題を生成して表示
-    initialBoard = generateRandomBoard();
-    board = JSON.parse(JSON.stringify(initialBoard));
-    createBoard(board);
+    generateAndSetNewBoard();
     createNumberButtons();
 });
