@@ -22,9 +22,6 @@ h1 {
     text-align: center;
     margin-bottom: 20px;
 }
-.hidden {
-    display: none !important;
-}
 
 #sudoku-grid {
     display: grid;
@@ -199,7 +196,7 @@ input {
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.5);
-    display: none;
+    display: none; /* ここが重要 */
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -245,7 +242,4 @@ input {
 }
 .modal-buttons button:hover {
     background-color: #a00037;
-}
-.modal-hidden {
-    display: none;
 }
