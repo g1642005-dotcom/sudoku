@@ -75,22 +75,31 @@ h1 {
     cursor: pointer;
 }
 
-.cell:nth-child(9n+4), .cell:nth-child(9n+7) {
-    border-left: 2px solid #d81b60;
+/* 3x3ブロックの境界線 */
+.cell:nth-child(3n+1) {
+    border-left: 3px solid #d81b60;
+}
+.cell:nth-child(9n+1) {
+    border-left: 1px solid #f0b0c0;
+}
+.cell:nth-child(9n+4) {
+    border-left: 3px solid #d81b60;
+}
+.cell:nth-child(9n+7) {
+    border-left: 3px solid #d81b60;
 }
 .cell:nth-child(n) {
     border-bottom: 1px solid #f0b0c0;
 }
-.cell:nth-child(n+19):nth-child(-n+27),
-.cell:nth-child(n+46):nth-child(-n+54) {
+.cell:nth-child(27n+1), .cell:nth-child(27n+2), .cell:nth-child(27n+3),
+.cell:nth-child(27n+4), .cell:nth-child(27n+5), .cell:nth-child(27n+6),
+.cell:nth-child(27n+7), .cell:nth-child(27n+8), .cell:nth-child(27n+9) {
     border-bottom: 3px solid #d81b60;
 }
-.cell:nth-child(1), .cell:nth-child(10), .cell:nth-child(19), .cell:nth-child(28), .cell:nth-child(37), .cell:nth-child(46), .cell:nth-child(55), .cell:nth-child(64), .cell:nth-child(73) {
-    border-left: 1px solid #f0b0c0;
+.cell:nth-child(81) {
+    border-bottom: 3px solid #d81b60;
 }
-.cell:nth-child(9n) {
-    border-right: 1px solid #f0b0c0;
-}
+
 
 input {
     width: 100%;
@@ -102,7 +111,7 @@ input {
     border-radius: 4px;
     outline: none;
     padding: 0;
-    caret-color: transparent; /* カーソルを非表示にする */
+    caret-color: transparent;
     position: absolute;
     top: 0;
     left: 0;
