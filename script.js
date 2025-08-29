@@ -186,7 +186,6 @@ document.addEventListener('DOMContentLoaded', () => {
     createNumberButtons();
     
     // サーバーの最終更新日を取得して表示
-    const updateDateElement = document.getElementById('update-date');
     if (updateDateElement) {
         fetch('script.js', { method: 'HEAD' })
             .then(response => {
