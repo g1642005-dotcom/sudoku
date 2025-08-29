@@ -72,16 +72,20 @@ document.addEventListener('DOMContentLoaded', () => {
                     input.addEventListener('keydown', (e) => {
                         if (e.key === 'Backspace' || e.key === 'Delete') {
                             e.preventDefault();
-                            selectedInput.value = '';
-                            clearNotes(selectedCell);
+                            if (selectedInput) {
+                                selectedInput.value = '';
+                                clearNotes(selectedCell);
+                            }
                         } else if (/^[1-9]$/.test(e.key)) {
-                            e.preventDefault(); // デフォルトの入力を防ぐ
+                            e.preventDefault();
                             if (noteMode) {
                                 toggleNote(selectedCell, parseInt(e.key));
                             } else {
                                 selectedInput.value = e.key;
                                 clearNotes(selectedCell);
                             }
+                        } else if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt') {
+                            // Control, Shift, Altは許可
                         } else {
                             e.preventDefault();
                         }
