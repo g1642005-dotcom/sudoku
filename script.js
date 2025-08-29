@@ -1,4 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const setupContainer = document.getElementById('setup-container');
+    const gameContainer = document.getElementById('game-container');
+    const customSetup = document.getElementById('custom-setup');
+    const randomModeButton = document.getElementById('random-mode-button');
+    const customModeButton = document.getElementById('custom-mode-button');
+    const startButton = document.getElementById('start-button');
+    const customBoardInput = document.getElementById('custom-board-input');
     const sudokuGrid = document.getElementById('sudoku-grid');
     const numberButtonsContainer = document.getElementById('number-buttons');
     const checkButton = document.getElementById('check-button');
@@ -21,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let selectedInput = null;
     let noteMode = false;
 
-    const board = [
+    let initialBoard = [
         [5, 3, 0, 0, 7, 0, 0, 0, 0],
         [6, 0, 0, 1, 9, 5, 0, 0, 0],
         [0, 9, 8, 0, 0, 0, 0, 6, 0],
@@ -32,15 +39,16 @@ document.addEventListener('DOMContentLoaded', () => {
         [0, 0, 0, 4, 1, 9, 0, 0, 5],
         [0, 0, 0, 0, 8, 0, 0, 7, 9]
     ];
+    let board = JSON.parse(JSON.stringify(initialBoard));
 
-    function createBoard() {
+    function createBoard(boardToRender) {
         sudokuGrid.innerHTML = '';
         for (let row = 0; row < 9; row++) {
             for (let col = 0; col < 9; col++) {
                 const cell = document.createElement('div');
                 cell.classList.add('cell');
                 
-                const value = board[row][col];
+                const value = boardToRender[row][col];
                 
                 if (value !== 0) {
                     cell.textContent = value;
@@ -68,7 +76,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
                     
-                    // IME入力対応
                     input.addEventListener('input', (e) => {
                         const value = e.target.value;
                         if (!/^[1-9]$/.test(value)) {
@@ -81,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // キーボード入力の処理をdocumentに移行
     document.addEventListener('keydown', (e) => {
         if (selectedCell && !selectedCell.classList.contains('fixed')) {
             if (e.key === 'Backspace' || e.key === 'Delete') {
@@ -99,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     clearNotes(selectedCell);
                 }
             } else if (e.key === 'Control' || e.key === 'Shift' || e.key === 'Alt' || e.key === 'Tab' || e.key === 'Meta') {
-                // 特殊キーは許可
             } else {
                 e.preventDefault();
             }
@@ -147,7 +152,6 @@ document.addEventListener('DOMContentLoaded', () => {
             notesDiv.classList.add('notes');
             cell.appendChild(notesDiv);
         }
-
         const existingNote = notesDiv.querySelector(`.note-${number}`);
         if (existingNote) {
             existingNote.remove();
@@ -157,7 +161,6 @@ document.addEventListener('DOMContentLoaded', () => {
             noteSpan.textContent = number;
             notesDiv.appendChild(noteSpan);
         }
-        
         const inputElement = cell.querySelector('input');
         if (inputElement) {
             inputElement.value = '';
@@ -181,9 +184,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    createBoard();
-    createNumberButtons();
-    
+    // モード選択ボタンのイベントリスナー
+    randomModeButton.addEventListener('click', () => {
+        setupContainer.classList.add('hidden');
+        gameContainer.classList.remove('hidden');
+        createBoard(initialBoard);
+        createNumberButtons();
+    });
+
+    customModeButton.addEventListener('click', () => {
+        setupContainer.classList.add('hidden');
+        customSetup.classList.remove('hidden');
+    });
+
+    startButton.addEventListener('click', () => {
+        const input = customBoardInput.value;
+        try {
+            const parsedBoard = JSON.parse(input);
+            if (Array.isArray(parsedBoard) && parsedBoard.length === 9) {
+                const isValid = parsedBoard.every(row => 
+                    Array.isArray(row) && 
+                    row.length === 9 && 
+                    row.every(num => typeof num === 'number' && (num >= 0 && num <= 9))
+                );
+                if (isValid) {
+                    board = parsedBoard;
+                    customSetup.classList.add('hidden');
+                    gameContainer.classList.remove('hidden');
+                    createBoard(board);
+                    createNumberButtons();
+                } else {
+                    alert('入力された形式が正しくありません。各行が9つの数字の配列になっているか確認してください。');
+                }
+            } else {
+                alert('入力された形式が正しくありません。9つの行の配列になっているか確認してください。');
+            }
+        } catch (e) {
+            alert('入力された形式が正しくありません。JSON形式（例: [..., ...]）で入力してください。');
+        }
+    });
+
     // サーバーの最終更新日を取得して表示
     if (updateDateElement) {
         fetch('script.js', { method: 'HEAD' })
