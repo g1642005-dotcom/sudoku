@@ -38,7 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
             [0, 6, 0, 0, 0, 0, 2, 8, 0],
             [0, 0, 0, 4, 1, 9, 0, 0, 5],
             [0, 0, 0, 0, 8, 0, 0, 7, 9],
-            // 新しい問題を追加
             [0, 0, 0, 0, 0, 0, 0, 0, 0],
             [0, 0, 0, 0, 0, 3, 0, 8, 5],
             [0, 0, 1, 0, 2, 0, 0, 0, 0],
@@ -210,6 +209,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // カスタムゲームボタンのイベントリスナー
     customGameButton.addEventListener('click', () => {
         modal.classList.remove('modal-hidden');
+        modal.style.display = 'flex'; // ポップアップを表示
     });
 
     // ポップアップ内のボタンイベントリスナー
@@ -227,10 +227,12 @@ document.addEventListener('DOMContentLoaded', () => {
         board = JSON.parse(JSON.stringify(initialBoard));
         createBoard(board);
         modal.classList.add('modal-hidden');
+        modal.style.display = 'none'; // ポップアップを非表示
     });
 
     closeModalButton.addEventListener('click', () => {
         modal.classList.add('modal-hidden');
+        modal.style.display = 'none'; // ポップアップを非表示
     });
 
     // サーバーの最終更新日を取得して表示
