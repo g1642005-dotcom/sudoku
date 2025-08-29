@@ -68,10 +68,18 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     });
 
-                    // キーボード入力の制限
+                    // キーボード入力の制限と削除処理
                     input.addEventListener('keydown', (e) => {
                         if (!/^[1-9]$/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Delete' && !e.metaKey && !e.ctrlKey) {
                             e.preventDefault();
+                        }
+                        // DeleteキーとBackspaceキーで入力とメモを削除
+                        if (e.key === 'Backspace' || e.key === 'Delete') {
+                            e.preventDefault();
+                            if (selectedCell) {
+                                selectedInput.value = '';
+                                clearNotes(selectedCell);
+                            }
                         }
                     });
                 }
@@ -90,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (noteMode) {
                         toggleNote(selectedCell, i);
                     } else {
-                        clearNotes(selectedCell); // 数字入力前にメモを消去
+                        clearNotes(selectedCell);
                         const inputElement = selectedCell.querySelector('input');
                         if (inputElement) {
                             inputElement.value = i;
@@ -132,20 +140,29 @@ document.addEventListener('DOMContentLoaded', () => {
             notesDiv.appendChild(noteSpan);
         }
         
-        // メモを追加・削除したら、入力欄の数字を消す
         const inputElement = cell.querySelector('input');
         if (inputElement) {
             inputElement.value = '';
         }
     }
 
-    // メモを全て消去する関数
     function clearNotes(cell) {
         const notesDiv = cell.querySelector('.notes');
         if (notesDiv) {
             notesDiv.remove();
         }
     }
+
+    // リセットボタンの機能を追加
+    resetButton.addEventListener('click', () => {
+        if (selectedCell && !selectedCell.classList.contains('fixed')) {
+            const inputElement = selectedCell.querySelector('input');
+            if (inputElement) {
+                inputElement.value = '';
+            }
+            clearNotes(selectedCell);
+        }
+    });
 
     createBoard();
     createNumberButtons();
