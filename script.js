@@ -1,8 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
     const sudokuGrid = document.getElementById('sudoku-grid');
     const numberButtonsContainer = document.getElementById('number-buttons');
+    const checkButton = document.getElementById('check-button');
+    const resetButton = document.getElementById('reset-button');
+
+    // メモモード切り替えボタンを追加
+    const noteModeToggle = document.createElement('button');
+    noteModeToggle.id = 'note-mode-toggle';
+    noteModeToggle.textContent = 'メモモード';
+    
+    // buttonsコンテナを親要素として取得し、メモボタンを追加
+    const buttonsContainer = document.querySelector('.buttons');
+    if(buttonsContainer) {
+        const controlsDiv = document.createElement('div');
+        controlsDiv.id = 'controls';
+        controlsDiv.appendChild(numberButtonsContainer);
+        controlsDiv.appendChild(noteModeToggle);
+        buttonsContainer.parentNode.insertBefore(controlsDiv, buttonsContainer);
+    }
+
     let selectedCell = null;
     let selectedInput = null;
+    let noteMode = false;
 
     const board = [
         [5, 3, 0, 0, 7, 0, 0, 0, 0],
@@ -36,20 +55,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     input.dataset.col = col;
                     cell.appendChild(input);
 
-                    input.addEventListener('click', (event) => {
+                    cell.addEventListener('click', () => {
                         if (selectedCell) {
                             selectedCell.classList.remove('selected');
                         }
-                        selectedCell = event.target.closest('.cell');
-                        selectedInput = event.target;
+                        selectedCell = cell;
+                        selectedInput = input;
                         selectedCell.classList.add('selected');
-                    });
-
-                    // キーボード入力に対応
-                    input.addEventListener('input', (event) => {
-                        const value = event.target.value;
-                        if (!/^[1-9]$/.test(value)) {
-                            event.target.value = '';
+                        
+                        if (!noteMode) {
+                            input.focus();
+                        } else {
+                            input.blur(); // メモモードならカーソルを外す
                         }
                     });
                 }
@@ -64,11 +81,55 @@ document.addEventListener('DOMContentLoaded', () => {
             button.classList.add('num-button');
             button.textContent = i;
             button.addEventListener('click', () => {
-                if (selectedInput) {
-                    selectedInput.value = i;
+                if (selectedCell && !selectedCell.classList.contains('fixed')) {
+                    if (noteMode) {
+                        toggleNote(selectedCell, i);
+                    } else {
+                        const inputElement = selectedCell.querySelector('input');
+                        if (inputElement) {
+                            inputElement.value = i;
+                        }
+                    }
                 }
             });
             numberButtonsContainer.appendChild(button);
+        }
+
+        noteModeToggle.addEventListener('click', () => {
+            noteMode = !noteMode;
+            noteModeToggle.classList.toggle('active', noteMode);
+
+            if (selectedInput) {
+                if (noteMode) {
+                    selectedInput.blur();
+                } else {
+                    selectedInput.focus();
+                }
+            }
+        });
+    }
+
+    function toggleNote(cell, number) {
+        let notesDiv = cell.querySelector('.notes');
+        if (!notesDiv) {
+            notesDiv = document.createElement('div');
+            notesDiv.classList.add('notes');
+            cell.appendChild(notesDiv);
+        }
+
+        const existingNote = notesDiv.querySelector(`.note-${number}`);
+        if (existingNote) {
+            existingNote.remove();
+        } else {
+            const noteSpan = document.createElement('span');
+            noteSpan.classList.add('notes-cell', `note-${number}`);
+            noteSpan.textContent = number;
+            notesDiv.appendChild(noteSpan);
+        }
+
+        const inputElement = cell.querySelector('input');
+        if (inputElement) {
+            inputElement.value = '';
         }
     }
 
