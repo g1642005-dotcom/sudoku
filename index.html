@@ -8,22 +8,53 @@
 </head>
 <body>
 
-    <h1>数独</h1>
-
-    <div id="game-container">
-        <div id="sudoku-grid"></div>
-
-        <div id="number-buttons"></div>
-
-        <div class="buttons">
-            <button id="check-button">解答チェック</button>
-            <button id="reset-button">リセット</button>
-            <button id="new-game-button">新しいゲーム</button>
-            <button id="custom-game-button">問題を入力して解く</button>
+    <div id="app-container">
+        <div id="main-content">
+            <h1>数独</h1>
+            <div id="sudoku-grid"></div>
         </div>
 
-        <div id="update-info">
-            最終更新: <span id="update-date"></span>
+        <div id="controls-panel">
+            <div id="top-controls">
+                <div class="stat">
+                    <span>通算</span>
+                    <span class="stat-value">43,025</span>
+                </div>
+                <div class="stat">
+                    <span>間違い</span>
+                    <span class="stat-value">0/3</span>
+                </div>
+                <div class="stat">
+                    <span>タイム</span>
+                    <span class="stat-value">00:18</span>
+                </div>
+            </div>
+            
+            <div id="action-buttons">
+                <button id="undo-button" class="action-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-corner-up-left"><polyline points="9 14 4 9 9 4"></polyline><path d="M20 20v-7a4 4 0 0 0-4-4H4"></path></svg>
+                </button>
+                <button id="erase-button" class="action-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-eraser"><path d="M16 18l4-4L6 4 2 8l14 10z"></path><line x1="12" y1="12" x2="20" y2="20"></line></svg>
+                </button>
+                <button id="note-mode-toggle" class="action-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+                </button>
+                <button id="hint-button" class="action-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bulb"><path d="M20.25 15.75c0 2.652-2.148 4.8-4.8 4.8-2.652 0-4.8-2.148-4.8-4.8M12 21v-2.25M17.25 12h-2.25M6.75 12h-2.25M15 6h-2.25M12 3v2.25M6.75 12a5.25 5.25 0 0 1 10.5 0"></path></svg>
+                </button>
+            </div>
+
+            <div id="number-buttons"></div>
+
+            <div id="bottom-buttons">
+                <button id="new-game-button">新規ゲーム</button>
+                <button id="custom-game-button">問題を入力して解く</button>
+            </div>
+            
+            <div id="update-info">
+                最終更新: <span id="update-date"></span>
+            </div>
         </div>
     </div>
 
