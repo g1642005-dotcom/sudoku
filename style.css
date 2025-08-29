@@ -1,29 +1,56 @@
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Arial', sans-serif; /* フォントを調整 */
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color: #f0f0f0;
-    margin-top: 50px;
+    background-color: #ffe0e6; /* ピンク系の背景色 */
+    margin-top: 20px;
+    color: #444;
+}
+
+h1 {
+    color: #d81b60; /* 濃いピンク */
 }
 
 #sudoku-grid {
     display: grid;
     grid-template-columns: repeat(9, 40px);
     grid-template-rows: repeat(9, 40px);
-    border: 3px solid black;
+    border: 3px solid #d81b60; /* 全体の枠を濃いピンクに */
+    border-radius: 8px; /* 角を丸く */
+    overflow: hidden; /* 角丸の調整 */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* 影を追加 */
 }
 
 .cell {
     width: 40px;
     height: 40px;
-    border: 1px solid #ccc;
+    border: 1px solid #f0b0c0; /* 薄いピンクの罫線 */
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 1.2rem;
-    cursor: pointer;
+    font-weight: bold;
+    background-color: #fff;
+    box-sizing: border-box; /* パディングとボーダーを幅に含める */
 }
+
+/* 3x3ブロックの境界線 */
+.cell:nth-child(9n+3), .cell:nth-child(9n+6) {
+    border-right: 2px solid #d81b60; /* 縦の太い線 */
+}
+.cell:nth-child(n) { /* 3の倍数の行の下に太い線を引く */
+    border-bottom: 2px solid #d81b60;
+}
+
+.cell:nth-child(9n) { /* 9列目のセルには右線不要 */
+    border-right: 1px solid #f0b0c0;
+}
+.cell:nth-child(9n+1):nth-child(n+19):nth-child(-n+27), /* 3行目の下 */
+.cell:nth-child(9n+1):nth-child(n+46):nth-child(-n+54) { /* 6行目の下 */
+    border-bottom: 3px solid #d81b60;
+}
+
 
 input {
     width: 100%;
@@ -31,4 +58,56 @@ input {
     text-align: center;
     border: none;
     font-size: 1.2rem;
+    background-color: #fff8f8; /* 入力欄の背景色 */
+    border-radius: 4px;
+    outline: none; /* フォーカス時の枠線を消す */
+}
+input:focus {
+    background-color: #fff0f5; /* フォーカス時の背景色 */
+}
+
+.fixed {
+    background-color: #fce4ec; /* 初期表示の数字の背景色 */
+    color: #880e4f;
+}
+
+#number-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+}
+
+.num-button {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%; /* 丸いボタン */
+    background-color: #f48fb1; /* ピンクのボタン */
+    color: white;
+    font-size: 1.5rem;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: background-color 0.2s;
+}
+
+.num-button:hover {
+    background-color: #ec407a; /* ホバー時の色 */
+}
+
+button { /* 解答チェック、リセットボタン */
+    background-color: #d81b60; /* 濃いピンク */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 20px; /* 丸いボタン */
+    margin-top: 15px;
+    cursor: pointer;
+    font-size: 1rem;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    transition: background-color 0.2s;
+}
+
+button:hover {
+    background-color: #a00037;
 }
