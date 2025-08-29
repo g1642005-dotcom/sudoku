@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let initialBoard = null;
     let board = null;
 
-    // 数独の問題リスト
+    // 数独の問題リストを関数外で定義
     const allBoards = [
         [5, 3, 0, 0, 7, 0, 0, 0, 0],
         [6, 0, 0, 1, 9, 5, 0, 0, 0],
